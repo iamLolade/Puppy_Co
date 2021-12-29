@@ -1,5 +1,26 @@
 const User = require("../models/User");
 
+//handle errors
+const handleErrors = (error) => {
+    console.log(error.message, error.code);
+    let errors = { email: "", password: "" };
+
+    //duplicate error
+    if(error.code === 11000) {
+        errors.email = "Email already in use";
+        return errors
+    }
+
+    //Validation errors
+    if(error.message.includes("user validation failed")) {
+        Object.values(error.errors).forEach(({ properties }) => {
+            errors[properties.path] = properties.message;
+        })
+    }
+
+    return errors
+}
+
 module.exports.signup_get = (req, res) => {
     res.render("signup");
 }
@@ -17,8 +38,8 @@ module.exports.signup_post = async (req, res) => {
         res.status(201).json(user)
 
     } catch (error) {
-        console.log(error);
-        res.status(400).send("Error; user not created!")
+        const err = handleErrors(error);
+        res.status(400).json(err)
     }
 }
 
