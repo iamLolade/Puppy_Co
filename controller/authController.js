@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 //handle errors
 const handleErrors = (error) => {
@@ -8,7 +9,7 @@ const handleErrors = (error) => {
     //duplicate error
     if(error.code === 11000) {
         errors.email = "Email already in use";
-        return errors
+        return {errors: errors}
     }
 
     //Validation errors
@@ -18,7 +19,17 @@ const handleErrors = (error) => {
         })
     }
 
-    return errors
+    return {errors: errors}
+}
+
+//Lifecycle
+const maxAge = 3 * 24 * 60 * 60;
+
+//Create token
+const createToken = (id) => {
+    return jwt.sign({ id }, "caveman jwt secret", {
+        expiresIn: maxAge
+    });
 }
 
 module.exports.signup_get = (req, res) => {
@@ -35,7 +46,9 @@ module.exports.signup_post = async (req, res) => {
     try {
 
         const user = await User.create({ email, password });
-        res.status(201).json(user)
+        const token = createToken(user._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+        res.status(201).json({ user: user._id })
 
     } catch (error) {
         const err = handleErrors(error);
