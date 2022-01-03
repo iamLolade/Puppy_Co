@@ -9,7 +9,19 @@ const handleErrors = (error) => {
     //duplicate error
     if(error.code === 11000) {
         errors.email = "Email already in use";
-        return {errors: errors}
+        return errors;
+    }
+
+    //incorrect email
+    if(error.message == "Incorrect email") {
+        errors.email = "This email is not registered";
+        return errors;
+    }
+
+    //incorrect password
+    if(error.message == "Incorrect password") {
+        errors.password = "Password is incorrect";
+        
     }
 
     //Validation errors
@@ -19,7 +31,7 @@ const handleErrors = (error) => {
         })
     }
 
-    return {errors: errors}
+    return errors;
 }
 
 //Lifecycle
@@ -52,7 +64,7 @@ module.exports.signup_post = async (req, res) => {
 
     } catch (error) {
         const err = handleErrors(error);
-        res.status(400).json(err)
+        res.status(400).json({ err })
     }
 }
 
@@ -60,6 +72,15 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
     const { email, password } = req.body;
 
-    console.log(email, password);
-    res.send("Welcome");
+    try {
+
+        const user = await User.login(email, password)
+        const token = createToken(user._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.status(200).json({user: user._id})
+
+    } catch (error) {
+        const err = handleErrors(error)
+        res.status(400).json({ err });
+    }
 }
