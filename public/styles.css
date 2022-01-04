@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 body{
-  margin: 20px 40px;
+  margin: 20px 100px;
   font-size: 1.2rem;
   letter-spacing: 1px;
   background: #fff;
@@ -91,8 +91,8 @@ header{
   align-items: center;
 }
 header img{
-  width: 250px;
-  margin-right: 40px;
+  width: 360px;
+  margin-right: 100px;
 }
 header h2{
   font-size: 3em;
@@ -112,24 +112,25 @@ header .btn{
   display: inline-block;
   font-size: 0.8em;
 }
-.recipes{
+.puppies{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  column-gap: 30px;
-  row-gap: 80px;
+  column-gap: 10px;
+  row-gap: 70px;
   margin: 80PX AUTO;
   max-width: 1200px;
 }
-.recipe{
+.puppy {
   display: inline-block;
-  border-radius: 20px;
+  border-radius: 25px;
   background: white;
   position: relative;
   text-align: center;
   padding: 0 20px 30px 20px
 }
-.recipe img{
-  width: 100px;
+.puppy img{
+  width: 270px;
+  height: 260px;
   margin: -30px auto 20px;
 }
 footer{
