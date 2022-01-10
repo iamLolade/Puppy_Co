@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 //handle errors
 const handleErrors = (error) => {
-    console.log(error.message, error.code);
+    //console.log(error.message, error.code);
     let errors = { email: "", password: "" };
 
     //duplicate error
@@ -20,8 +20,7 @@ const handleErrors = (error) => {
 
     //incorrect password
     if(error.message == "Incorrect password") {
-        errors.password = "Password is incorrect";
-        
+        errors.password = "Password is incorrect";  
     }
 
     //Validation errors
