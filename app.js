@@ -2,9 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require("./routes/authRoutes")
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
-
+dotenv.config({path: "./config.env"})
 const app = express();
 
 // middleware
@@ -19,8 +20,8 @@ app.use(cookieParser())
 app.set('view engine', 'ejs');
 
 // database connection
-const dbURI = 'mongodb+srv://caveman:jwtauth@jwt-practice.cntyf.mongodb.net/jwtdb';
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
+const database = process.env.dbURI
+mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
   .then((result) => app.listen(3001))
   .catch((err) => console.log(err));
 
